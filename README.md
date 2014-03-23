@@ -5,7 +5,7 @@ Autocomplete filter for Grappelli
 
 Filter for Foreign key and ManyToMany relations with AJAX autocomplete. Reuses features from Grappelli, works nicely along other filters and with both standard and sidebar filter template...
 
-![Screenshot](docs_img/screensgot.png)
+![Screenshot](docs_img/screenshot.png)
 
 ## Usage
 
