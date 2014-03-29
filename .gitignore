@@ -2,3 +2,4 @@
 *.pot
 *.pyc
 local_settings.py
+django_grappelli_filters.egg-info
