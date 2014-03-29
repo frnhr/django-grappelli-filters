@@ -63,3 +63,10 @@ class SearchFilter(AbstractFieldListFilter):
     def get_parameter_name(self, field_path):
         return u'{0}__icontains'.format(field_path)
 
+
+class SearchFilterC(SearchFilter):
+    """ Case-sensitive serach filter """
+
+    def get_parameter_name(self, field_path):
+        return u'{0}__contains'.format(field_path)
+
