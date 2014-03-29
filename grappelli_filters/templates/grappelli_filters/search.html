@@ -1,0 +1,66 @@
+{% load i18n %}
+
+<div class="grp-module">
+    <div class="grp-row">
+        <form class="search_filter_form search_filter_form_{{ spec.parameter_name }}">
+            <label>{% blocktrans with title|capfirst as filter_title %}{{ filter_title }}{% endblocktrans %}</label>
+            <div class="field" style="width: 70%; float: left">
+                <input type="text" name="{{ spec.parameter_name }}" placeholder="All" value="{{ spec.used_parameters.items.0.1 }}" class="search_filter" />
+            </div>
+            <input type="submit" value="Apply" style="float: right; padding: 3px 9px; height: 22px; margin: 1px 0 0 0;" class="search_filter_apply" />
+        </form>
+    </div>
+
+    <script type="text/javascript">
+        django.jQuery(function($) {
+
+            // url helper
+            var buildUrl = function (url, parameters) {
+                var qs = "";
+                for (var key in parameters) {
+                    if (!parameters.hasOwnProperty(key)) continue;
+                    var value = parameters[key];
+                    qs += encodeURIComponent(key) + "=" + encodeURIComponent(value) + "&";
+                }
+                if (qs.length > 0) {
+                    qs = qs.substring(0, qs.length - 1); //chop off last "&"
+                    url = url + "?" + qs;
+                }
+                return url;
+            };
+
+
+            // handle the "Apply" button
+
+            var urlParams = {};
+            (function () {
+                var match,
+                    pl = /\+/g, // Regex for replacing addition symbol with a space
+                    search = /([^&=]+)=?([^&]*)/g,
+                    decode = function (s) {
+                        return decodeURIComponent(s.replace(pl, " "));
+                    },
+                    query = window.location.search.substring(1);
+
+                while (match = search.exec(query))
+                    urlParams[decode(match[1])] = decode(match[2]);
+            })();
+
+            $('.search_filter_form_{{ spec.parameter_name }} .search_filter_apply').on('click', function (event) {
+                event.preventDefault();
+
+                var $form = $(this).parents('form');
+                var query_param = $form.find('input.search_filter').prop('name');
+
+                urlParams[query_param] = $('input[name='+query_param+']').val();
+
+                if (!urlParams[query_param])
+                    delete urlParams[query_param];
+
+                url = buildUrl(window.location.href.split('?')[0], urlParams);
+                window.location = url;
+            });
+
+        });
+    </script>
+</div>
