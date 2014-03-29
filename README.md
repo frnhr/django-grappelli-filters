@@ -24,10 +24,10 @@ Configure Grappelli autocomplete feature as described [here](https://django-grap
 
 In `admin.py` add:
 
-    from grappelli_filters import filters
+    from grappelli_filters import RelatedAutocompleteFilter, FiltersMixin
  
-    class MyModelAdmin(filters.AdminMixin, admin.ModelAdmin):
-        list_filter = ( ... ('field_name', filters.RelatedAutocompleteFilter), ... )
+    class MyModelAdmin(FiltersMixin, admin.ModelAdmin):
+        list_filter = ( ... ('field_name', RelatedAutocompleteFilter), ... )
         
         
 That's it!

@@ -1,4 +1,3 @@
-from django.templatetags.static import static
 from django.contrib import admin
 from django.contrib.contenttypes.models import ContentType
 
@@ -41,10 +40,4 @@ class RelatedAutocompleteFilter(admin.FieldListFilter):
         return self.used_parameters.get(self.parameter_name, '')
 
 
-class AdminMixin(object):
 
-    class Media:
-        js = [static('grappelli_filters/filter.js')]
-        css = {
-            'all': [static('grappelli_filters/filter.css')],
-        }
