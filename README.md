@@ -3,7 +3,7 @@ django-grappelli-filters
 
 Autocomplete filter for Grappelli
 
-v 0.2 (usable, but only if you know why)
+v 0.2.1 (usable, but only if you know why)
 
 Filter for Foreign key and ManyToMany relations with AJAX autocomplete. Reuses features from Grappelli, works nicely along other filters and with both standard and sidebar filter template...
 
