@@ -4,9 +4,13 @@ from django.contrib.contenttypes.models import ContentType
 
 class AbstractFieldListFilter(admin.FieldListFilter):
     tempalte = ''
+    filter_parameter = None
+    url_parameter = None
 
     def get_parameter_name(self, field_path):
         """ Query parameter name for the URL """
+        if self.url_parameter:
+            return self.url_parameter
         raise NotImplementedError
 
     def __init__(self, field, request, params, model, model_admin, field_path):
@@ -28,7 +32,8 @@ class AbstractFieldListFilter(admin.FieldListFilter):
     def queryset(self, request, queryset):
         """ Does the actual filtering """
         if self.used_param():
-            return queryset.filter(**{self.parameter_name: self.used_param()})
+            filter_parameter = self.filter_parameter if self.filter_parameter else self.parameter_name
+            return queryset.filter(**{filter_parameter: self.used_param()})
 
     def expected_parameters(self):
         """
@@ -44,13 +49,19 @@ class AbstractFieldListFilter(admin.FieldListFilter):
 
 class RelatedAutocompleteFilter(AbstractFieldListFilter):
     template = 'grappelli_filters/related_autocomplete.html'
+    model = None
 
     def get_parameter_name(self, field_path):
+        if self.url_parameter:
+            field_path = self.url_parameter
         return u'{0}__id__exact'.format(field_path)
 
     def __init__(self, field, request, params, model, model_admin, field_path):
         super(RelatedAutocompleteFilter, self).__init__(field, request, params, model, model_admin, field_path)
-        content_type = ContentType.objects.get_for_model(getattr(model, self.field_path).field.rel.to)
+        if self.model:
+            content_type = ContentType.objects.get_for_model(self.model)
+        else:
+            content_type = ContentType.objects.get_for_model(getattr(model, self.field_path).field.rel.to)
         self.grappelli_trick = u'/{app_label}/{model_name}/t=id'.format(
             app_label=content_type.app_label,
             model_name=content_type.model
