@@ -13,7 +13,7 @@ Filter for Foreign key and ManyToMany relations with AJAX autocomplete. Reuses f
 
 Put `grappelli-filters` in your `PYTHONPATH`.
 
-Add `'grappelli-filters'` to `INSTALLED_APPS`
+Add `'grappelli_filters'` to `INSTALLED_APPS`
 
 ## Filters
 
