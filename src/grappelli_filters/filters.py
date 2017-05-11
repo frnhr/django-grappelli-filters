@@ -1,9 +1,10 @@
+# coding=utf-8
 from django.contrib import admin
 from django.contrib.contenttypes.models import ContentType
 
 
 class AbstractFieldListFilter(admin.FieldListFilter):
-    tempalte = ''
+    template = ''
     filter_parameter = None
     url_parameter = None
 
@@ -43,13 +44,19 @@ class AbstractFieldListFilter(admin.FieldListFilter):
         return [self.parameter_name]
 
     def used_param(self):
-        """ Value from the query string"""
+        """ Parsed value from the query string"""
         return self.used_parameters.get(self.parameter_name, '')
 
+    def input_value(self):
+        """ Value for HTML input element """
+        return self.used_param()
 
-class RelatedAutocompleteFilter(AbstractFieldListFilter):
-    template = 'grappelli_filters/related_autocomplete.html'
+
+class RelatedFkAutocompleteFilter(AbstractFieldListFilter):
+    template = 'grappelli_filters/related_autocomplete_fk.html'
     model = None
+    # TODO define parameter_name = '{}__id__exact'
+    # TODO and use this class as base for M2m
 
     def get_parameter_name(self, field_path):
         if self.url_parameter:
@@ -57,7 +64,8 @@ class RelatedAutocompleteFilter(AbstractFieldListFilter):
         return u'{0}__id__exact'.format(field_path)
 
     def __init__(self, field, request, params, model, model_admin, field_path):
-        super(RelatedAutocompleteFilter, self).__init__(field, request, params, model, model_admin, field_path)
+
+        super(RelatedFkAutocompleteFilter, self).__init__(field, request, params, model, model_admin, field_path)
         if self.model:
             content_type = ContentType.objects.get_for_model(self.model)
         else:
@@ -66,6 +74,32 @@ class RelatedAutocompleteFilter(AbstractFieldListFilter):
             app_label=content_type.app_label,
             model_name=content_type.model
         )
+
+
+class RelatedM2mAutocompleteFilter(AbstractFieldListFilter):
+    template = 'grappelli_filters/related_autocomplete_m2m.html'
+    model = None
+
+    def get_parameter_name(self, field_path):
+        if self.url_parameter:
+            field_path = self.url_parameter
+        return u'{0}__id__in'.format(field_path)
+
+    def __init__(self, field, request, params, model, model_admin, field_path):
+
+        super(RelatedM2mAutocompleteFilter, self).__init__(field, request, params, model, model_admin, field_path)
+        if self.model:
+            content_type = ContentType.objects.get_for_model(self.model)
+        else:
+            content_type = ContentType.objects.get_for_model(field.rel.to)
+        self.grappelli_trick = u'/{app_label}/{model_name}/'.format(
+            app_label=content_type.app_label,
+            model_name=content_type.model
+        )
+
+    def input_value(self):
+        """ Value for HTML input element """
+        return ','.join(self.used_param())
 
 
 class SearchFilter(AbstractFieldListFilter):

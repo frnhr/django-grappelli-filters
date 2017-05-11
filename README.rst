@@ -51,10 +51,10 @@ In ``admin.py`` add:
 
 ::
 
-    from grappelli_filters import RelatedAutocompleteFilter, FiltersMixin
+    from grappelli_filters import RelatedFkAutocompleteFilter, FiltersMixin
 
     class MyModelAdmin(FiltersMixin, admin.ModelAdmin):
-        list_filter = ( ... ('field_name', RelatedAutocompleteFilter), ... )
+        list_filter = ( ... ('field_name', RelatedFkAutocompleteFilter), ... )
         
 
 Search Filter

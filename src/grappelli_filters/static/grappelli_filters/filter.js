@@ -29,9 +29,9 @@
         var detect_change = function(filter_query) {
             setTimeout(function(){detect_change(filter_query);}, 100);
             var new_val = $('#id_'+filter_query).val();
-            if (detect_change_last_val[filter_query] == -1) {
+            if (detect_change_last_val[filter_query] === -1) {
                 detect_change_last_val[filter_query] = new_val;
-            }else {
+            } else {
                 if (detect_change_last_val[filter_query] !== new_val) {
                     detect_change_last_val[filter_query] = new_val;
                     urlParams[filter_query] = new_val;
@@ -64,7 +64,8 @@
             for (var key in parameters) {
                 if (!parameters.hasOwnProperty(key)) continue;
                 var value = parameters[key];
-                qs += encodeURIComponent(key) + "=" + encodeURIComponent(value) + "&";
+                //qs += encodeURIComponent(key) + "=" + encodeURIComponent(value) + "&";
+                qs += encodeURIComponent(key) + "=" + value + "&";
             }
             if (qs.length > 0) {
                 qs = qs.substring(0, qs.length - 1); //chop-off trailing "&"
@@ -79,11 +80,23 @@
         // find all autocomplete filters and apply stuff
         ////////////////////////////////////////////////////////////////////////
 
-        $('.grp-filter input.autocomplete').each(function() {
+        $('.grp-filter input.autocomplete.grappelli-filter-fk').each(function() {
             var $this = $(this);
             var filter_query = $this.attr('name');
             $("#id_"+filter_query).grp_autocomplete_fk({
                 lookup_url:"/grappelli/lookup/related/",
+                autocomplete_lookup_url:"/grappelli/lookup/autocomplete/"
+            });
+            $("#id_"+filter_query+'-autocomplete').prop('placeholder', 'All');
+            detect_change_last_val[filter_query] = -1;
+            detect_change(filter_query);
+        });
+
+        $('.grp-filter input.autocomplete.grappelli-filter-m2m').each(function() {
+            var $this = $(this);
+            var filter_query = $this.attr('name');
+            $("#id_"+filter_query).grp_autocomplete_m2m({
+                lookup_url:"/grappelli/lookup/m2m/",
                 autocomplete_lookup_url:"/grappelli/lookup/autocomplete/"
             });
             $("#id_"+filter_query+'-autocomplete').prop('placeholder', 'All');

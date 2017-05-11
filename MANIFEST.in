@@ -1,4 +1,4 @@
 include LICENSE
 include README.rst
-recursive-include grappelli_filters/static *
-recursive-include grappelli_filters/templates *
+recursive-include src/grappelli_filters/static *
+recursive-include src/grappelli_filters/templates *
