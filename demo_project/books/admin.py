@@ -6,7 +6,7 @@ from django.contrib import admin
 from books.models import Book, Author, Language, Genre, Award
 from grappelli_filters.admin import FiltersMixin
 from grappelli_filters.filters import RelatedFkAutocompleteFilter, \
-    RelatedM2mAutocompleteFilter
+    RelatedM2mAutocompleteFilter, DateTimeStartFilter, DateTimeEndFilter
 from utils import str_list_of_objects
 
 
@@ -23,9 +23,10 @@ class BookAdmin(FiltersMixin, admin.ModelAdmin):
     )
     list_filter = (
         'awards__year',
-        'publication_date',
         ('author', RelatedFkAutocompleteFilter),
         ('genres', RelatedM2mAutocompleteFilter),
+        ('publication_date', DateTimeStartFilter),
+        ('publication_date', DateTimeEndFilter),
     )
 
     # not related to filtering, just showing the original Grappelli feature:

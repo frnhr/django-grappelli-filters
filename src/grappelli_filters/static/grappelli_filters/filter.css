@@ -17,9 +17,20 @@
 }
 
 #grp-filters .grp-autocomplete-wrapper-fk .grp-related-remove,
-#grp-filters .grp-autocomplete-wrapper-m2m .grp-related-remove {
+#grp-filters .grp-autocomplete-wrapper-m2m .grp-related-remove,
+#grp-filters .datetime_filter_form .grp-related-remove {
     padding: 0;
     margin: 0 -24px 0 0;
+
+    display: inline-block;
+    position: absolute;
+    right: 24px;
+    top: 0;
+    font-size: 0;
+    line-height: 0;
+    width: 23px;
+    height: 23px;
+    border: 1px solid #ccc;
 
     -moz-border-radius-topright: 3px;
     -webkit-border-top-right-radius: 3px;
@@ -71,4 +82,24 @@
 }
 #grp-filters .grp-autocomplete-wrapper-m2m .grp-repr + .grp-search > input::-webkit-input-placeholder {
     color: transparent;
+}
+
+#grp-filters .datetime_filter_form .field {
+    position: relative;
+    float: left;
+}
+
+#grp-filters .datetime_filter_form input.datetime_filter {
+    background: #FFF !important;
+    border: 1px solid #CCC !important;
+    width: 165px;
+}
+#grp-filters .datetime_filter_form input.datetime_filter:invalid + .grp-related-remove {
+    display: none;
+}
+#grp-filters .datetime_filter_form .filter_apply {
+    float: right;
+    padding: 3px 9px;
+    height: 25px;
+    margin: 0;
 }

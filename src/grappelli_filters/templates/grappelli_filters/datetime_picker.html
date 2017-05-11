@@ -1,0 +1,120 @@
+{% load i18n %}
+
+<div class="grp-module">
+    {# TODO load this in the head, and only once #}
+    <link rel="stylesheet" href="https://unpkg.com/flatpickr/dist/flatpickr.min.css" />
+    <script src="https://unpkg.com/flatpickr"></script>
+
+    <div class="grp-row">
+        <form class="datetime_filter_form datetime_filter_form_{{ spec.parameter_name }}">
+            <label>
+                {% blocktrans with title|capfirst as filter_title %}{{ filter_title }}{% endblocktrans %}
+                {% if spec.range_side == 'start' %}
+                    <em>{% blocktrans %}(starting after){% endblocktrans %}</em>
+                {% else %}
+                    <em>{% blocktrans %}(ending before){% endblocktrans %}</em>
+                {% endif %}
+            </label>
+            <div class="field">
+                <input
+                        type="text"
+                        required="required"
+                        name="{{ spec.parameter_name }}"
+                        value="{{ spec.input_value }}"
+                        class="datetime_filter"
+                />
+                <a  class="grp-related-remove"
+                    href="#"
+                ></a>
+            </div>
+            <input
+                    type="submit"
+                    value="&#x2713;"
+                    class="filter_apply"
+            />
+        </form>
+    </div>
+
+    <script type="text/javascript">
+        django.jQuery(function($) {
+
+            var $form = $('.datetime_filter_form_{{ spec.parameter_name }}');
+            var $input = $form.find('input.datetime_filter');
+            var $clearButton = $form.find('.grp-related-remove');
+
+            // url helper
+            var buildUrl = function (url, parameters) {
+                var qs = "";
+                for (var key in parameters) {
+                    if (!parameters.hasOwnProperty(key)) continue;
+                    var value = parameters[key];
+                    qs += encodeURIComponent(key) + "=" + encodeURIComponent(value) + "&";
+                }
+                if (qs.length > 0) {
+                    qs = qs.substring(0, qs.length - 1); //chop off last "&"
+                    url = url + "?" + qs;
+                }
+                return url;
+            };
+
+
+            // decode URL query params
+
+            var urlParams = {};
+            (function () {
+                var match,
+                    pl = /\+/g, // Regex for replacing addition symbol with a space
+                    search = /([^&=]+)=?([^&]*)/g,
+                    decode = function (s) {
+                        return decodeURIComponent(s.replace(pl, " "));
+                    },
+                    query = window.location.search.substring(1);
+
+                while (match = search.exec(query))
+                    urlParams[decode(match[1])] = decode(match[2]);
+            })();
+
+
+            // insert filter value into URL and relad the page
+
+            var applyFilter = function() {
+                var query_param = $form.find('input.datetime_filter').prop('name');
+
+                urlParams[query_param] = $('input[name='+query_param+']').val();
+
+                if (!urlParams[query_param])
+                    delete urlParams[query_param];
+
+                url = buildUrl(window.location.href.split('?')[0], urlParams);
+                window.location = url;
+            };
+
+            // apply Flatpickr (JS datetime picker widget)
+
+            $form.flatpickr_instance = new Flatpickr(
+                $input[0],
+                {
+                    enableTime: true,
+                    allowInput: true
+                }
+            );
+
+
+            // handle the "Apply" button
+            $form.find('.filter_apply').on('click', function(event) {
+                event.preventDefault();
+                applyFilter();
+            });
+
+
+            // handle the "X" buttom
+
+            $clearButton.on('click', function(event) {
+                event.preventDefault();
+                $form.flatpickr_instance.clear();
+                // applyFilter();  // <- it's not that simple
+            });
+
+        });
+    </script>
+</div>

@@ -115,3 +115,17 @@ class SearchFilterC(SearchFilter):
     def get_parameter_name(self, field_path):
         return u'{0}__contains'.format(field_path)
 
+
+class DateTimeStartFilter(AbstractFieldListFilter):
+    template = 'grappelli_filters/datetime_picker.html'
+    range_side = 'start'
+
+    def get_parameter_name(self, field_path):
+        return u'{0}__gte'.format(field_path)
+
+
+class DateTimeEndFilter(DateTimeStartFilter):
+    range_side = 'end'
+
+    def get_parameter_name(self, field_path):
+        return u'{0}__lte'.format(field_path)
