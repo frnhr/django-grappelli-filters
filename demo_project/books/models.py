@@ -34,6 +34,10 @@ class Award(models.Model):
     def __str__(self):
         return '{} {}'.format(self.name, self.year)
 
+    @staticmethod
+    def autocomplete_search_fields():
+        return ("name__icontains", )
+
 
 @python_2_unicode_compatible
 class Language(models.Model):
@@ -45,6 +49,11 @@ class Language(models.Model):
 
     def __str__(self):
         return self.name
+
+    @staticmethod
+    def autocomplete_search_fields():
+        return ("name__icontains", )
+
 
 
 @python_2_unicode_compatible
@@ -68,7 +77,7 @@ class Author(models.Model):
 
     @staticmethod
     def autocomplete_search_fields():
-        return ("last_name__icontains", "first_name__icontains",)
+        return ("last_name__icontains", "first_name__icontains", )
 
 
 @python_2_unicode_compatible

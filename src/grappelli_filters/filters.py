@@ -16,7 +16,9 @@ class AbstractFieldListFilter(admin.FieldListFilter):
 
     def __init__(self, field, request, params, model, model_admin, field_path):
         self.parameter_name = self.get_parameter_name(field_path)
+        title_attr = self.title
         super(AbstractFieldListFilter, self).__init__(field, request, params, model, model_admin, field_path)
+        self.title = title_attr or self.title
 
     def has_output(self):
         """ Whether to show filter """

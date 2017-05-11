@@ -97,9 +97,16 @@
 #grp-filters .datetime_filter_form input.datetime_filter:invalid + .grp-related-remove {
     display: none;
 }
-#grp-filters .datetime_filter_form .filter_apply {
+#grp-filters .filter_apply {
     float: right;
     padding: 3px 9px;
     height: 25px;
     margin: 0;
+}
+
+
+#grp-filters .search_filter_form input.search_filter {
+    background: #FFF !important;
+    border: 1px solid #CCC !important;
+    width: 165px;
 }
