@@ -75,14 +75,25 @@
     padding-left: 2px;
     height: 18px;
 }
-#grp-filters .grp-autocomplete-wrapper-m2m .ui-autocomplete-input::-webkit-input-placeholder,
-#grp-filters .grp-autocomplete-wrapper-m2m .ui-autocomplete-input:-ms-input-placeholder,
+#grp-filters .grp-autocomplete-wrapper-m2m .ui-autocomplete-input::-webkit-input-placeholder {
+    color: #777;
+}
+#grp-filters .grp-autocomplete-wrapper-m2m .ui-autocomplete-input:-ms-input-placeholder {
+    color: #777;
+}
 #grp-filters .grp-autocomplete-wrapper-m2m .ui-autocomplete-input::-moz-placeholder {
-    color: #000;
+    color: #777;
 }
 #grp-filters .grp-autocomplete-wrapper-m2m .grp-repr + .grp-search > input::-webkit-input-placeholder {
     color: transparent;
 }
+#grp-filters .grp-autocomplete-wrapper-m2m .grp-repr + .grp-search > input:-ms-input-placeholder {
+    color: transparent;
+}
+#grp-filters .grp-autocomplete-wrapper-m2m .grp-repr + .grp-search > input::-moz-placeholder {
+    color: transparent;
+}
+
 
 #grp-filters .datetime_filter_form .field {
     position: relative;
@@ -101,6 +112,7 @@
     float: right;
     padding: 3px 9px;
     height: 25px;
+    width: 30px;
     margin: 0;
 }
 
